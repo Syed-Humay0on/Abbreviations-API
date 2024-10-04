@@ -27,7 +27,7 @@ namespace API_JSON.Controllers
 			;
 		}
 		[HttpPost]
-        public async Task<IActionResult> Abbreviations(string Search_Abbr)
+        public async Task<IActionResult> Abbreviations(Abbr_Model Search_Abbr)
 		{
             string URL = "https://www.stands4.com/services/v2/abbr.php?uid=12802&tokenid=H78gmEjXBfNk8WmY&term=" + Search_Abbr +"&format=json";
 			using (HttpClient client = new HttpClient())
@@ -37,15 +37,23 @@ namespace API_JSON.Controllers
 					//WebClient web = new WebClient();
 					string JsonData = await client.GetStringAsync(URL);
 					JsonNode node = JsonNode.Parse(JsonData);
-					ViewBag.json = JsonData;
+					//ViewBag.json = JsonData;
 
-					
-
-					if (node != null)
+					List<Abbr_Model> listed = new List<Abbr_Model>();
+					JsonArray jsonArray = (JsonArray)node["result"];
+					foreach(var item in jsonArray)
 					{
+						Search_Abbr.Term = item["term"].ToString();
+						Search_Abbr.Definition = item["definition"].ToString();
+						Search_Abbr.Category_Name = item["categoryname"].ToString();
+						Search_Abbr.Parent_Category = item["parentcategory"].ToString();
+						Search_Abbr.Id = item["id"].ToString();
+						Search_Abbr.Category = item["category"].ToString();
 
+						listed.Add(Search_Abbr);
 					}
-					return View();
+					
+					return RedirectToAction("Abbreviations", listed);
 				}
 				catch (HttpRequestException ex)
 				{
