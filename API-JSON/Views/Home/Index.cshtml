@@ -1,0 +1,29 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-6">
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between">
+					check Abbreviations
+					<a asp-action="Abbreviations" class="btn btn-info">Redirect</a>
+				</li>
+
+				<li class="list-group-item d-flex justify-content-between">
+					check Movies
+					<a asp-action="Movies" class="btn btn-dark disabled">Redirect</a>
+
+				</li>
+
+				<li class="list-group-item d-flex justify-content-between">
+					check Weather
+					<a asp-action="Weather" class="btn btn-dark disabled">Redirect</a>
+
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
