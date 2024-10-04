@@ -21,11 +21,12 @@ namespace API_JSON.Controllers
             return View();
         }
 
-//        public IActionResult Abbreviations()
-//        {
-//            return View();
-//;        }
-        [HttpPost]
+		public IActionResult Abbreviations()
+		{
+			return View();
+			;
+		}
+		[HttpPost]
         public async Task<IActionResult> Abbreviations(string Search_Abbr)
 		{
             string URL = "https://www.stands4.com/services/v2/abbr.php?uid=12802&tokenid=H78gmEjXBfNk8WmY&term=" + Search_Abbr +"&format=json";
