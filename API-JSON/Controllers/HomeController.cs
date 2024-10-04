@@ -29,7 +29,14 @@ namespace API_JSON.Controllers
 		[HttpPost]
         public async Task<IActionResult> Abbreviations(Abbr_Model Search_Abbr)
 		{
-            string URL = "https://www.stands4.com/services/v2/abbr.php?uid=12802&tokenid=H78gmEjXBfNk8WmY&term=" + Search_Abbr +"&format=json";
+			if (Search_Abbr == null || string.IsNullOrEmpty(Search_Abbr.Term))
+			{
+				// Return an error view if no search term is provided
+				ViewBag.Error = "Invalid search term.";
+				return View("Error");
+			}
+
+			string URL = "https://www.stands4.com/services/v2/abbr.php?uid=12802&tokenid=H78gmEjXBfNk8WmY&term=" + Search_Abbr.Term +"&format=json";
 			using (HttpClient client = new HttpClient())
 			{
 				try
@@ -43,17 +50,29 @@ namespace API_JSON.Controllers
 					JsonArray jsonArray = (JsonArray)node["result"];
 					foreach(var item in jsonArray)
 					{
-						Search_Abbr.Term = item["term"].ToString();
-						Search_Abbr.Definition = item["definition"].ToString();
-						Search_Abbr.Category_Name = item["categoryname"].ToString();
-						Search_Abbr.Parent_Category = item["parentcategory"].ToString();
-						Search_Abbr.Id = item["id"].ToString();
-						Search_Abbr.Category = item["category"].ToString();
+						//Search_Abbr.Term = item["term"].ToString();
+						//Search_Abbr.Definition = item["definition"].ToString();
+						//Search_Abbr.Category_Name = item["categoryname"].ToString();
+						//Search_Abbr.Parent_Category = item["parentcategory"].ToString();
+						//Search_Abbr.Id = item["id"].ToString();
+						//Search_Abbr.Category = item["category"].ToString();
 
-						listed.Add(Search_Abbr);
+						//listed.Add(Search_Abbr);
+
+						var abbrModel = new Abbr_Model
+						{
+							Term = item["term"].ToString(),
+							Definition = item["definition"].ToString(),
+							Category_Name = item["categoryname"].ToString(),
+							Parent_Category = item["parentcategory"].ToString(),
+							Id = item["id"].ToString(),
+							Category = item["category"].ToString()
+						};
+
+						listed.Add(abbrModel);
 					}
 					
-					return RedirectToAction("Abbreviations", listed);
+					return View("Abbreviations", listed);
 				}
 				catch (HttpRequestException ex)
 				{

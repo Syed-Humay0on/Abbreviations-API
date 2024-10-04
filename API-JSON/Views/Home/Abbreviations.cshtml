@@ -1,25 +1,48 @@
-﻿@{
+﻿@model List<API_JSON.Models.Abbr_Model>
+
+
+@{
 	ViewData["Title"] = "Abbreviations";
 }
 
-<div class="container text-center">
+<div class="container">
 	<div class="row">
 		<div class="col-6">
 			<form asp-controller="Home" method="post">
 				<h2 class="text-light">Enter Abbreviations</h2>
-				<input class="form-control" type="text" name="Abbreviations" placeholder="Search for abbreviation or acronym" />
+				<input class="form-control" type="text" name="Term" placeholder="Search for abbreviation or acronym" />
 				<br /><button type="submit" class="btn btn-info">Check</button>
 			</form>
 		</div>
 	</div>
+
+    //Output
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row mt-4 list-group">
+            @foreach (var item in Model)
+            {
+                <div class="col-6 mb-3 bg-light list-group-item d-flex justify-content-between">
+                    <div>
+                        <p class="text-danger">ID @item.Id</p><br />
+                        <strong class="text-dark">Term:</strong> @item.Term <br />
+                        <strong class="text-dark">Definition:</strong> @item.Definition <br />
+                        <strong class="text-dark">Category:</strong> @item.Category_Name <br />
+                        <strong class="text-dark">Parent Category:</strong> @item.Parent_Category
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-3">No abbreviations found. Please search for a term.</div>
+    }
+
 </div>
 
-@if(Model != null)
-{
-	<button type="button" class="btn btn-sm btn-dark" data-bs-toggle="popover" 
-	data-bs-title=@Model.Id 
-	data-bs-content=@Model.Definition>@Model.Term</button>
-}
+
 
 
 
